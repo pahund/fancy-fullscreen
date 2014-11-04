@@ -1,12 +1,36 @@
 $(document).ready(function() {
-    var fancyOpen = false;
 
-    $(document).on("webkitfullscreenchange mozfullscreenchange MSFullScreenChange fullscreenchange", function () {
-        console.log("[PH_LOG] fullscreen change"); // PH_TODO: REMOVE
-        if (fancyOpen) {
-            $.fancybox.close();
-        } else {
-            $.fancybox.open([
+    function requestFullscreen() {
+        var docElement = document.documentElement,
+            request;
+
+        request = docElement.requestFullScreen
+            || docElement.webkitRequestFullScreen
+            || docElement.mozRequestFullScreen
+            || docElement.msRequestFullScreen;
+
+        if (typeof request !== "undefined" && request) {
+            request.call(docElement);
+            return true;
+        }
+        return false;
+    }
+
+    function exitFullscreen() {
+        var request = document.exitFullscreen
+            || document.webkitExitFullscreen
+            || document.mozCancelFullScreen
+            || document.msExitFullscreen;
+
+        if (typeof request !== 'undefined' && request) {
+            request.call(document);
+            return true;
+        }
+        return false;
+    }
+
+    var fancyOpen = false,
+        fancyFiles = [
                 {
                     href: "img/big_image_1.jpg",
                     title: "schöne Landschaft"
@@ -19,44 +43,36 @@ $(document).ready(function() {
                     href: "img/big_image_3.jpg",
                     title: "extrem schöne Landschaft"
                 }
-            ], {
+        ],
+        fancyOptions = {
                 afterShow: function () {
                     $(".fancybox-close, .fancybox-overlay").click(function (e) {
                         if (e.target !== e.currentTarget) {
                             return;
                         }
-                        console.log("[PH_LOG] close"); // PH_TODO: REMOVE
-                        var request = document.exitFullscreen
-                            || document.webkitExitFullscreen
-                            || document.mozCancelFullScreen
-                            || document.msExitFullscreen;
-
-                        if (typeof request !== 'undefined' && request) {
-                            console.log("[PH_LOG] er ist defined"); // PH_TODO: REMOVE
-                            request.call(document);
+                        if (!exitFullscreen()) {
+                            $.fancybox.close();
+                            fancyOpen = false;
                         }
                     });
                 }
-            });
+            };
+
+    $(document).on("webkitfullscreenchange mozfullscreenchange MSFullScreenChange fullscreenchange", function () {
+        if (fancyOpen) {
+            $.fancybox.close();
+        } else {
+            $.fancybox.open(fancyFiles, fancyOptions);
         }
         fancyOpen = !fancyOpen;
     });
 
 
     $("#fancyBoxOpener").click(function () {
-        var docElement = document.documentElement,
-            request;
-
-        request = docElement.requestFullScreen
-            || docElement.webkitRequestFullScreen
-            || docElement.mozRequestFullScreen
-            || docElement.msRequestFullScreen;
-
-        if (typeof request !== "undefined" && request) {
-            request.call(docElement);
+        if (!requestFullscreen()) {
+            $.fancybox.open(fancyFiles, fancyOptions);
+            fancyOpen = true;
         }
-
-
     });
 
 });
