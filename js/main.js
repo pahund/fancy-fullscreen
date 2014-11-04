@@ -21,7 +21,10 @@ $(document).ready(function() {
                 }
             ], {
                 afterShow: function () {
-                    $(".fancybox-close, .fancybox-overlay").click(function () {
+                    $(".fancybox-close, .fancybox-overlay").click(function (e) {
+                        if (e.target !== e.currentTarget) {
+                            return;
+                        }
                         console.log("[PH_LOG] close"); // PH_TODO: REMOVE
                         var request = document.exitFullscreen
                             || document.webkitExitFullscreen
