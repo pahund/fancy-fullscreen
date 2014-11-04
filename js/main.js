@@ -1,7 +1,7 @@
 $(document).ready(function() {
     var fancyOpen = false;
 
-    $(document).on("webkitfullscreenchange mozfullscreenchange iefullscreenchange fullscreenchange", function () {
+    $(document).on("webkitfullscreenchange mozfullscreenchange MSFullScreenChange fullscreenchange", function () {
         console.log("[PH_LOG] fullscreen change"); // PH_TODO: REMOVE
         if (fancyOpen) {
             $.fancybox.close();
@@ -21,7 +21,7 @@ $(document).ready(function() {
                 }
             ], {
                 afterShow: function () {
-                    $(".fancybox-close").click(function () {
+                    $(".fancybox-close, .fancybox-overlay").click(function () {
                         console.log("[PH_LOG] close"); // PH_TODO: REMOVE
                         var request = document.exitFullscreen
                             || document.webkitExitFullscreen
