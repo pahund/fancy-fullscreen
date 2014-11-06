@@ -58,7 +58,7 @@ $(document).ready(function() {
                 }
             };
 
-    $(document).on("webkitfullscreenchange mozfullscreenchange MSFullScreenChange fullscreenchange", function () {
+    $(document).on("webkitfullscreenchange mozfullscreenchange MSFullscreenChange fullscreenchange", function () {
         if (fancyOpen) {
             $.fancybox.close();
         } else {
